@@ -1,0 +1,83 @@
+<apex:page controller="getdistances">
+    <button onclick="getLocation()">Start </button>
+    <button onclick="getLocation1()">stop</button>
+    <apex:form >
+        
+        <div id="demo"/>
+        <div id="demo1"/>
+        
+        <apex:actionFunction name="paraFunction" action="{!startlocation}" rerender="view">       
+            <apex:param id="anode" name="node" value="" />
+            <apex:param id="anode1" name="node1" value="" />
+        </apex:actionFunction> 
+        
+        <apex:actionFunction name="paraFunction2" action="{!stoplocation}" rerender="view">       
+            <apex:param id="anode0" name="node" value="" />
+            <apex:param id="anode11" name="node1" value="" />
+        </apex:actionFunction>
+        
+        <apex:actionFunction name="paraFunction3" action="{!savedistance}" rerender="view">       
+            <apex:param id="anode00" name="node" value="" />
+            <apex:param id="anode111" name="node1" value="" />
+        </apex:actionFunction>
+        
+        <apex:commandButton action="{!getDist}" value="Distance" id="theButton"/>  
+    </apex:form>
+    
+    <apex:outputText value="{0, number, 00.00 Miles}">
+      Distance<apex:param value="{!dist}" />
+</apex:outputText>
+    <script>
+    var condition = true;
+    
+    var x = document.getElementById("demo");
+    
+    function getLocation() {
+        if (navigator.geolocation) {
+            console.log("inside");
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else { 
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+    
+    function showPosition(position) {
+        
+        x.innerHTML = "Latitude: " + position.coords.latitude + 
+            "<br>Longitude: " + position.coords.longitude;
+        paraFunction(position.coords.latitude , position.coords.longitude );
+        var myVar = setInterval(myTimer,60000);
+        //120000
+        console.log("iiiiiiiii==>",document.getElementById("lat").value);
+    }
+    var x1 = document.getElementById("demo1");
+    
+    function getLocation1() {
+        condition = false;
+        if (navigator.geolocation) {
+            console.log("inside");
+            navigator.geolocation.getCurrentPosition(showPosition1);
+        } else { 
+            x1.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+    function showPosition1(position) {
+        x1.innerHTML = "Latitude: " + position.coords.latitude + 
+            "<br>Longitude: " + position.coords.longitude;
+        paraFunction2(position.coords.latitude , position.coords.longitude );        
+    }
+    
+    function myTimer() {
+        if(condition){
+            console.log('timmer');
+            navigator.geolocation.getCurrentPosition(showPosition3);
+        }
+    }
+    function showPosition3(position) {
+        paraFunction3(position.coords.latitude , position.coords.longitude );
+        
+    }
+    
+    
+    </script>
+</apex:page>
